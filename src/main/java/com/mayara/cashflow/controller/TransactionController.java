@@ -1,10 +1,10 @@
 package com.mayara.cashflow.controller;
 
+import com.mayara.cashflow.dto.TransactionRequest;
 import com.mayara.cashflow.model.Transaction;
 import com.mayara.cashflow.model.TransactionType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -40,5 +40,18 @@ public class TransactionController {
             }
         }
         return result;
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Transaction create(@RequestBody TransactionRequest request) {
+        Transaction transaction = new Transaction(
+                request.description(),
+                request.amount(),
+                request.date(),
+                request.type()
+        );
+        transactions.add(transaction);
+        return transaction;
     }
 }
