@@ -28,6 +28,22 @@ public class Transaction {
     protected Transaction() {}
 
     public Transaction(String description, BigDecimal amount, LocalDate date, TransactionType type) {
+        validate(description, amount, type);
+        this.description = description;
+        this.amount = amount;
+        this.date = date;
+        this.type = type;
+    }
+
+    public void update(String description, BigDecimal amount, LocalDate date, TransactionType type) {
+        validate(description, amount, type);
+        this.description = description;
+        this.amount = amount;
+        this.date = date;
+        this.type = type;
+    }
+
+    private void validate(String description, BigDecimal amount, TransactionType type) {
         if (description == null || description.isBlank()) {
             throw new IllegalArgumentException("A descrição é obrigatória.");
         }
@@ -37,11 +53,6 @@ public class Transaction {
         if (type == null) {
             throw new IllegalArgumentException("O tipo da transação é obrigatório.");
         }
-
-        this.description = description;
-        this.amount = amount;
-        this.date = date;
-        this.type = type;
     }
 
     public Long getId() {

@@ -40,6 +40,11 @@ public class TransactionController {
         transactionService.delete(id);
     }
 
+    @PutMapping("/{id}")
+    public Transaction update(@PathVariable Long id, @RequestBody TransactionRequest request) {
+        return transactionService.update(id, request);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Transaction create(@RequestBody TransactionRequest request) {

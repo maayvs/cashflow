@@ -8,14 +8,11 @@ import com.mayara.cashflow.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TransactionService {
 
-    //TEMPORÁRIO (Necessário ainda configurar o banco de dados
     private final TransactionRepository transactionRepository;
 
     public TransactionService(TransactionRepository transactionRepository) {
@@ -57,5 +54,16 @@ public class TransactionService {
     public void delete(Long id) {
         Transaction transaction = findById(id);
         transactionRepository.delete(transaction);
+    }
+
+    public Transaction update(Long id, TransactionRequest request) {
+        Transaction transaction = findById(id);
+        transaction.update(
+                request.description(),
+                request.amount(),
+                request.date(),
+                request.type()
+        );
+        return transactionRepository.save(transaction);
     }
 }
