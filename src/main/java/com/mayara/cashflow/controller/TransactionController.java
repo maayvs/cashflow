@@ -3,6 +3,7 @@ package com.mayara.cashflow.controller;
 import com.mayara.cashflow.dto.TransactionRequest;
 import com.mayara.cashflow.model.Transaction;
 import com.mayara.cashflow.service.TransactionService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,13 +42,13 @@ public class TransactionController {
     }
 
     @PutMapping("/{id}")
-    public Transaction update(@PathVariable Long id, @RequestBody TransactionRequest request) {
+    public Transaction update(@PathVariable Long id,@Valid @RequestBody TransactionRequest request) {
         return transactionService.update(id, request);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Transaction create(@RequestBody TransactionRequest request) {
+    public Transaction create(@Valid @RequestBody TransactionRequest request) {
         return transactionService.create(request);
     }
 }
