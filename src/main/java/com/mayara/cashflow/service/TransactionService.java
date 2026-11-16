@@ -1,6 +1,7 @@
 package com.mayara.cashflow.service;
 
 import com.mayara.cashflow.dto.TransactionRequest;
+import com.mayara.cashflow.exception.ResourceNotFoundException;
 import com.mayara.cashflow.model.Transaction;
 import com.mayara.cashflow.model.TransactionType;
 import com.mayara.cashflow.repository.TransactionRepository;
@@ -46,6 +47,11 @@ public class TransactionService {
             }
         }
         return result;
+    }
+
+    public Transaction findById (Long id) {
+        return transactionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Transação não encontrada. id: " + id));
     }
 
 }

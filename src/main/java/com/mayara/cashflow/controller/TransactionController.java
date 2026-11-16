@@ -29,6 +29,11 @@ public class TransactionController {
         return transactionService.calculateBalance();
     }
 
+    @GetMapping("/{id}")
+    public Transaction findById(@PathVariable Long id) {
+        return transactionService.findById(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Transaction create(@RequestBody TransactionRequest request) {
