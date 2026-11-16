@@ -49,9 +49,13 @@ public class TransactionService {
         return result;
     }
 
-    public Transaction findById (Long id) {
+    public Transaction findById(Long id) {
         return transactionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Transação não encontrada. id: " + id));
     }
 
+    public void delete(Long id) {
+        Transaction transaction = findById(id);
+        transactionRepository.delete(transaction);
+    }
 }
