@@ -1,6 +1,7 @@
 package com.mayara.cashflow.service;
 
 import com.mayara.cashflow.dto.TransactionRequest;
+import com.mayara.cashflow.dto.TransactionResponse;
 import com.mayara.cashflow.exception.ResourceNotFoundException;
 import com.mayara.cashflow.model.Transaction;
 import com.mayara.cashflow.model.TransactionType;
@@ -8,6 +9,7 @@ import com.mayara.cashflow.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,19 +21,22 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
-    public List<Transaction> findAll() {
-        return transactionRepository.findAll();
+    public List<TransactionResponse> findAll() {
+        List<TransactionResponse> responses = new ArrayList<>();
+        for (Transaction transaction : transactionRepository.findAll()) {
+            responses.add(TransactionResponse.from(transaction));
+        }
+        return responses;
     }
 
-    public Transaction create(TransactionRequest request) {
+    public TransactionResponse create(TransactionRequest request) {
         Transaction transaction = new Transaction(
                 request.description(),
                 request.amount(),
                 request.date(),
                 request.type()
         );
-        transactionRepository.save(transaction);
-        return transaction;
+        return TransactionResponse.from(transactionRepository.save(transaction));
     }
 
     public BigDecimal calculateBalance() {
@@ -46,24 +51,28 @@ public class TransactionService {
         return result;
     }
 
-    public Transaction findById(Long id) {
-        return transactionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Transação não encontrada. id: " + id));
+    public TransactionResponse findById(Long id) {
+        return TransactionResponse.from(findTransactionOrThrow(id));
     }
 
     public void delete(Long id) {
-        Transaction transaction = findById(id);
+        Transaction transaction = findTransactionOrThrow(id);
         transactionRepository.delete(transaction);
     }
 
-    public Transaction update(Long id, TransactionRequest request) {
-        Transaction transaction = findById(id);
+    public TransactionResponse update(Long id, TransactionRequest request) {
+        Transaction transaction = findTransactionOrThrow(id);
         transaction.update(
                 request.description(),
                 request.amount(),
                 request.date(),
                 request.type()
         );
-        return transactionRepository.save(transaction);
+        return TransactionResponse.from(transactionRepository.save(transaction));
+    }
+
+    private Transaction findTransactionOrThrow(Long id) {
+        return transactionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Transação não encontrada. id: " + id));
     }
 }

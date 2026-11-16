@@ -1,6 +1,7 @@
 package com.mayara.cashflow.controller;
 
 import com.mayara.cashflow.dto.TransactionRequest;
+import com.mayara.cashflow.dto.TransactionResponse;
 import com.mayara.cashflow.model.Transaction;
 import com.mayara.cashflow.service.TransactionService;
 import jakarta.validation.Valid;
@@ -21,7 +22,7 @@ public class TransactionController {
     }
 
     @GetMapping
-    public List<Transaction> list() {
+    public List<TransactionResponse> list() {
         return transactionService.findAll();
     }
 
@@ -31,7 +32,7 @@ public class TransactionController {
     }
 
     @GetMapping("/{id}")
-    public Transaction findById(@PathVariable Long id) {
+    public TransactionResponse findById(@PathVariable Long id) {
         return transactionService.findById(id);
     }
 
@@ -42,13 +43,13 @@ public class TransactionController {
     }
 
     @PutMapping("/{id}")
-    public Transaction update(@PathVariable Long id,@Valid @RequestBody TransactionRequest request) {
+    public TransactionResponse update(@PathVariable Long id,@Valid @RequestBody TransactionRequest request) {
         return transactionService.update(id, request);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Transaction create(@Valid @RequestBody TransactionRequest request) {
+    public TransactionResponse create(@Valid @RequestBody TransactionRequest request) {
         return transactionService.create(request);
     }
 }
