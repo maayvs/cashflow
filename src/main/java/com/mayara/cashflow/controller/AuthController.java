@@ -1,5 +1,7 @@
 package com.mayara.cashflow.controller;
 
+import com.mayara.cashflow.dto.LoginRequest;
+import com.mayara.cashflow.dto.LoginResponse;
 import com.mayara.cashflow.dto.RegisterRequest;
 import com.mayara.cashflow.dto.UserResponse;
 import com.mayara.cashflow.service.AuthService;
@@ -21,5 +23,10 @@ public class AuthController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse register(@Valid @RequestBody RegisterRequest request) {
         return authService.register(request);
+    }
+
+    @PostMapping("/login")
+    public LoginResponse login(@Valid @RequestBody LoginRequest request) {
+        return authService.login(request);
     }
 }
