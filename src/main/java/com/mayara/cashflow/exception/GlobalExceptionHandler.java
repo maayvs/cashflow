@@ -7,6 +7,7 @@ import com.mayara.cashflow.dto.ErrorResponse;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -61,6 +62,16 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 "Dados inválidos.",
                 errors,
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleMissingRequestParameter(MissingServletRequestParameterException ex) {
+        return new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Parâmetro obrigatório não encontrado: " + ex.getParameterName(),
                 LocalDateTime.now()
         );
     }
