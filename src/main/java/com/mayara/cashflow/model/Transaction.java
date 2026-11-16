@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table (name = "transactions")
+@Table(name = "transactions")
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,22 +25,29 @@ public class Transaction {
     @Column(nullable = false)
     private TransactionType type;
 
-    protected Transaction() {}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    public Transaction(String description, BigDecimal amount, LocalDate date, TransactionType type) {
-        validate(description, amount, type);
-        this.description = description;
-        this.amount = amount;
-        this.date = date;
-        this.type = type;
+    protected Transaction() {
     }
 
-    public void update(String description, BigDecimal amount, LocalDate date, TransactionType type) {
+    public Transaction(String description, BigDecimal amount, LocalDate date, TransactionType type, Category category) {
         validate(description, amount, type);
         this.description = description;
         this.amount = amount;
         this.date = date;
         this.type = type;
+        this.category = category;
+    }
+
+    public void update(String description, BigDecimal amount, LocalDate date, TransactionType type, Category category) {
+        validate(description, amount, type);
+        this.description = description;
+        this.amount = amount;
+        this.date = date;
+        this.type = type;
+        this.category = category;
     }
 
     private void validate(String description, BigDecimal amount, TransactionType type) {
@@ -73,5 +80,9 @@ public class Transaction {
 
     public TransactionType getType() {
         return type;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 }

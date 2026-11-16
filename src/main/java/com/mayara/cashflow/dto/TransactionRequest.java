@@ -23,6 +23,8 @@ public record TransactionRequest(
         LocalDate date,
 
         @NotNull(message = "O tipo de transação é obrigatório.")
-        TransactionType type
+        TransactionType type,
+
+        Long categoryId
 ) {
 }
