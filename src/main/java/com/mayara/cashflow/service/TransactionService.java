@@ -3,6 +3,7 @@ package com.mayara.cashflow.service;
 import com.mayara.cashflow.dto.TransactionRequest;
 import com.mayara.cashflow.model.Transaction;
 import com.mayara.cashflow.model.TransactionType;
+import com.mayara.cashflow.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,16 +15,14 @@ import java.util.List;
 public class TransactionService {
 
     //TEMPORÁRIO (Necessário ainda configurar o banco de dados
-    private final List<Transaction> transactions = new ArrayList<>();
+    private final TransactionRepository transactionRepository;
 
-    public TransactionService() {
-        transactions.add(new Transaction("Mercado", new BigDecimal("250.00"), LocalDate.of(2026, 11, 10), TransactionType.EXPENSE));
-        transactions.add(new Transaction("Salário", new BigDecimal("4500.00"), LocalDate.of(2026, 11, 5), TransactionType.INCOME));
-        transactions.add(new Transaction("Cartão", new BigDecimal("500.00"), LocalDate.of(2026, 11, 10), TransactionType.EXPENSE));
+    public TransactionService(TransactionRepository transactionRepository) {
+        this.transactionRepository = transactionRepository;
     }
 
     public List<Transaction> findAll() {
-        return transactions;
+        return transactionRepository.findAll();
     }
 
     public Transaction create(TransactionRequest request) {
@@ -33,13 +32,13 @@ public class TransactionService {
                 request.date(),
                 request.type()
         );
-        transactions.add(transaction);
+        transactionRepository.save(transaction);
         return transaction;
     }
 
     public BigDecimal calculateBalance() {
         BigDecimal result = BigDecimal.ZERO;
-        for (Transaction t : transactions) {
+        for (Transaction t : transactionRepository.findAll()) {
             if (t.getType() == TransactionType.INCOME) {
                 result = result.add(t.getAmount());
             } else {
